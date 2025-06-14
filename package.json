@@ -1,5 +1,5 @@
 {
-    "name": "GameWeb",
+    "name": "gameweb",
     "private": true,
     "workspaces": [
         "frontend",
