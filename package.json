@@ -1,0 +1,12 @@
+{
+    "name": "GameWeb",
+    "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
+    "scripts": {
+        "start:frontend": "npm --prefix frontend run dev",
+        "start:backend": "npm --prefix backend run start:dev"
+    }
+}
