@@ -4,9 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+  <title>Game Hub</title>
   </head>
   <body>
+    <script>
+      (function() {
+        try {
+          var key = 'theme';
+          var stored = localStorage.getItem(key);
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var mode;
+          if (stored === 'dark' || stored === 'light') {
+            mode = stored;
+          } else if (prefersDark) {
+            mode = 'dark';
+          } else {
+            mode = 'light';
+          }
+          if (mode === 'dark') document.documentElement.classList.add('dark');
+        } catch {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
