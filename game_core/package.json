@@ -1,12 +1,16 @@
 {
-    "name": "gameweb",
-    "private": true,
-    "workspaces": [
-        "frontend",
-        "backend"
-    ],
-    "scripts": {
-        "start:frontend": "npm --prefix frontend run dev",
-        "start:backend": "npm --prefix backend run start:dev"
-    }
+  "name": "game_core",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "start:frontend": "npm --prefix frontend run dev",
+    "start:backend": "npm --prefix backend run start:dev",
+    "dev": "concurrently -n front,back -c blue,magenta \"npm run start:frontend\" \"npm run start:backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
 }
