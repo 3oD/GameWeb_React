@@ -14,7 +14,7 @@ const USERS: User[] = [
   {
     id: 'u1',
     email: 'test@example.com',
-    passwordHash: '$2a$10$demo', // placeholder
+    passwordHash: '$2a$10$demoHashForTestingPurposes', // placeholder - in production use proper bcrypt hash
     displayName: 'Test User',
     roles: ['user'],
     settings: { language: 'de', theme: 'system' },
