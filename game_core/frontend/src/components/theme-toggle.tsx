@@ -1,40 +1,58 @@
-import { Moon, Sun, Monitor } from 'lucide-react'
-import { useTheme } from '@/lib/theme'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+import { Moon, Sun, Monitor } from 'lucide-react';
+import { useThemeStore } from '@/stores';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useEffect } from 'react';
 
 export function ThemeToggle() {
-  const { theme, updateTheme, resolved } = useTheme()
-  let icon: React.ReactNode
-  if (theme === 'system') {
-    icon = resolved === 'dark' ? <Moon className="size-4" /> : <Sun className="size-4" />
-  } else {
-    icon = theme === 'dark' ? <Moon className="size-4" /> : <Sun className="size-4" />
-  }
+  const { theme, resolved, updateTheme, initializeTheme } = useThemeStore();
+  
+  // Initialize theme on mount
+  useEffect(() => {
+    initializeTheme();
+  }, [initializeTheme]);
+  
+  // Get display value and icon for current theme
+  const getThemeDisplay = (currentTheme: string) => {
+    switch (currentTheme) {
+      case 'light':
+        return { label: 'Hell', icon: <Sun className="size-4" /> };
+      case 'dark':
+        return { label: 'Dunkel', icon: <Moon className="size-4" /> };
+      case 'system':
+      default: {
+        const systemIcon = resolved === 'dark' ? <Moon className="size-4" /> : <Sun className="size-4" />;
+        return { label: 'System', icon: systemIcon };
+      }
+    }
+  };
+
+  const currentDisplay = getThemeDisplay(theme);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-9 w-9 p-0" aria-label="Toggle theme">
-          {icon}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36">
-  <DropdownMenuItem onClick={() => updateTheme('system')}>
-          <Monitor className="mr-2 size-4" /> System
-        </DropdownMenuItem>
-  <DropdownMenuItem onClick={() => updateTheme('light')}>
-          <Sun className="mr-2 size-4" /> Hell
-        </DropdownMenuItem>
-  <DropdownMenuItem onClick={() => updateTheme('dark')}>
-          <Moon className="mr-2 size-4" /> Dunkel
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+    <Select value={theme} onValueChange={updateTheme}>
+      <SelectTrigger className="h-9 w-auto px-3 gap-2" aria-label="Toggle theme">
+        {currentDisplay.icon}
+      </SelectTrigger>
+      <SelectContent align="end">
+        <SelectItem value="system">
+          <div className="flex items-center gap-2">
+            <Monitor className="size-4" />
+            System
+          </div>
+        </SelectItem>
+        <SelectItem value="light">
+          <div className="flex items-center gap-2">
+            <Sun className="size-4" />
+            Hell
+          </div>
+        </SelectItem>
+        <SelectItem value="dark">
+          <div className="flex items-center gap-2">
+            <Moon className="size-4" />
+            Dunkel
+          </div>
+        </SelectItem>
+      </SelectContent>
+    </Select>
+  );
 }

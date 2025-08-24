@@ -8,6 +8,7 @@ type ThemeContextValue = {
   theme: Theme
   updateTheme: (t: Theme) => void
   resolved: 'light' | 'dark'
+  syncFromUserSettings: (userTheme?: Theme) => void
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
@@ -24,19 +25,27 @@ function applyTheme(theme: Theme) {
 
 export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [theme, setTheme] = React.useState<Theme>('system')
+  const [initialized, setInitialized] = React.useState(false)
 
   // initialize from storage on mount
   useEffect(() => {
+    if (initialized) return
+    
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
       if (stored) {
-  setTheme(stored)
+        setTheme(stored)
         applyTheme(stored)
+        setInitialized(true)
         return
       }
     } catch {}
+    
+    // If no stored theme, check if we can get it from user settings
+    // This will be handled by the Settings page or auth flow
     applyTheme('system')
-  }, [])
+    setInitialized(true)
+  }, [initialized])
 
   const updateTheme = useCallback((t: Theme) => {
     setTheme(t)
@@ -45,6 +54,18 @@ export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode
     } catch {}
     applyTheme(t)
   }, [])
+
+  const syncFromUserSettings = useCallback((userTheme?: Theme) => {
+    if (!userTheme) return
+    // Only sync if different from current theme
+    if (userTheme !== theme) {
+      setTheme(userTheme)
+      try {
+        localStorage.setItem(STORAGE_KEY, userTheme)
+      } catch {}
+      applyTheme(userTheme)
+    }
+  }, [theme])
 
   // Apply on mount and subscribe to system changes when on system
   useEffect(() => {
@@ -69,8 +90,8 @@ export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode
   }, [])
 
   const value = useMemo<ThemeContextValue>(
-    () => ({ theme, updateTheme, resolved: theme === 'system' ? getSystemTheme() : theme }),
-    [theme, updateTheme]
+    () => ({ theme, updateTheme, resolved: theme === 'system' ? getSystemTheme() : theme, syncFromUserSettings }),
+    [theme, updateTheme, syncFromUserSettings]
   )
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
