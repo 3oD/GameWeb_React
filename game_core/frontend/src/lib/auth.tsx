@@ -7,6 +7,7 @@ type User = {
   displayName: string
   avatarUrl?: string
   roles: string[]
+  settings?: { language?: string; theme?: 'light' | 'dark' | 'system' }
 }
 
 type AuthContextType = {
