@@ -9,8 +9,6 @@ import Settings from './pages/Settings.tsx'
 import Games from './pages/Games.tsx'
 import GameFrame from './pages/GameFrame.tsx'
 import Home from './pages/Home.tsx'
-import { ThemeProvider } from '@/lib/theme'
-import { AuthProvider } from '@/lib/auth'
 
 const router = createBrowserRouter([
   {
@@ -21,18 +19,14 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
-  { path: 'games', element: <Games /> },
-  { path: 'games/:id', element: <GameFrame /> },
+      { path: 'games', element: <Games /> },
+      { path: 'games/:id', element: <GameFrame /> },
     ],
   },
 ])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-    </ThemeProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 )
