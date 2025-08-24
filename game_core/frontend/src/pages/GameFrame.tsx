@@ -1,12 +1,21 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
-import { games } from '../config/games'
+import { apiGet } from '@/lib/api'
+type Game = { id: string; name: string; description?: string; url: string; active: boolean }
 
 export default function GameFrame() {
   const { id } = useParams<{ id: string }>()
-  const game = useMemo(() => games.find((g) => g.id === id), [id])
+  const [game, setGame] = useState<Game | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    if (!id) return
+    apiGet<Game>(`/games/${id}`)
+      .then(setGame)
+      .catch((e) => setError(String(e)))
+  }, [id])
 
-  if (!game) return <Navigate to="/games" replace />
+  if (error) return <Navigate to="/games" replace />
+  if (!game) return <div>Lade…</div>
   if (!game.active) return <div>Spiel ist aktuell inaktiv.</div>
 
   return (

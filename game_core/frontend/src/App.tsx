@@ -6,8 +6,11 @@ import {
   NavigationMenuLink,
 } from '@/components/ui/navigation-menu'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { useAuth } from '@/lib/auth'
+import { Button } from '@/components/ui/button'
 
 function App() {
+  const { user, logout } = useAuth()
   return (
     <div className="min-h-dvh bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-50">
       <header className="border-b border-slate-200 dark:border-slate-800">
@@ -34,7 +37,14 @@ function App() {
           </NavigationMenu>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
-            <Link to="/login" className="hover:underline">Login</Link>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-slate-500 dark:text-slate-400">{user.displayName}</span>
+                <Button variant="outline" size="sm" onClick={logout}>Logout</Button>
+              </div>
+            ) : (
+              <Link to="/login" className="hover:underline">Login</Link>
+            )}
           </div>
         </div>
       </header>

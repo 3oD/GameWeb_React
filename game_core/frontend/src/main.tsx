@@ -10,6 +10,7 @@ import Games from './pages/Games.tsx'
 import GameFrame from './pages/GameFrame.tsx'
 import Home from './pages/Home.tsx'
 import { ThemeProvider } from '@/lib/theme'
+import { AuthProvider } from '@/lib/auth'
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>
 )

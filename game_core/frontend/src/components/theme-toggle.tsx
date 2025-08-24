@@ -19,7 +19,7 @@ export function ThemeToggle() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button variant="outline" className="h-9 w-9 p-0" aria-label="Toggle theme">
           {icon}
         </Button>

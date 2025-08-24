@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark mode is handled by Tailwind's dark mode with class strategy */
 
 @layer base {
 	:root {
