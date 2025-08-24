@@ -51,6 +51,21 @@ export async function apiPatch<T>(path: string, body?: any, opts: ApiOptions = {
   return res.json()
 }
 
+export async function apiPut<T>(path: string, body?: any, opts: ApiOptions = {}): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...authHeader(opts.token ?? getStoredToken()),
+  }
+  const res = await fetch(BASE + path, {
+    method: 'PUT',
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: 'omit',
+  })
+  if (!res.ok) throw new Error(`PUT ${path} failed: ${res.status}`)
+  return res.json()
+}
+
 const TOKEN_KEY = 'auth:token'
 const USER_KEY = 'auth:user'
 
